@@ -5,7 +5,8 @@ import numpy as np
 # If you do not go through this process, the file will not work as the encoded ASNI nature of the base file cannot be used with pandas
 
 # Read csv and set columns
-data = pd.read_csv('/Users/frankkumitis/Desktop/KD & DM Term Project/oasis_longitudinal_demographics_conv.csv')
+url = 'https://github.com/mitch172/K.D.-Project/blob/main/oasis_longitudinal_demographics.csv?raw=true'
+data = pd.read_csv(url)
 data.columns = ['Subject ID', 'MRI ID',	'Group', 'Visit', 'MR Delay', 'M/F', 'Hand', 'Age', 'EDUC',	'SES',	'MMSE',	'CDR',	'eTIV',	'nWBV',	'ASF']
 
 # Drop Subject ID, MRI ID, and Hand

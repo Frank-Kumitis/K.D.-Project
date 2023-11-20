@@ -69,6 +69,9 @@ data.plot.scatter(x = 'Age', y = 'ASF')
 plt.show()
 
 # Make decision tree for finding Demented status
+data = data.drop(['Visit'], axis=1)
+data = data.drop(['MR Delay'], axis=1)
+data = data.drop(['M/F'], axis=1)
 X = data.drop('Group', axis=1)
 y = data['Group']
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)

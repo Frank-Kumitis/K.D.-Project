@@ -45,22 +45,3 @@ data2['Age'] = pd.cut(data2['Age'],5,labels=[1.0,2.0,3.0,4.0,5.0])
 data2.rename(columns={'Age':'Age Group'},inplace=True)
 print('\nAfter Discretization:')
 print(data2['Age Group'])
-
-# Change values in data from Nondemented to 0 and Demented to 1 for plotting purposes
-def update_value(value):
-    return 0 if 'Nondemented' in value else 1
-data['Group'] = data['Group'].apply(lambda x: update_value(x))
-
-# Display graph comparing MMSE to Group assignment
-data.plot.line('MMSE', 'Group')
-plt.show()
-
-# Display graph comparing gender to group assignment
-def update_value(value):
-    return 0 if 'M' in value else 1
-data['M/F'] = data['M/F'].apply(lambda x: update_value(x))
-grouped_totals = data.groupby('Group')['M/F'].sum()
-grouped_totals.plot.bar('M/F', 'Group')
-plt.xlabel('Male vs. Female')
-plt.ylabel('Total amount of Demented patients')
-plt.show()

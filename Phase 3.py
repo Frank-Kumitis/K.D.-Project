@@ -25,7 +25,7 @@ plt.ylabel('Total amount of Demented patients')
 plt.title('Patient MMSE value compared to Demented status')
 plt.show()
 
-# Display graph comparing gender to group assignment
+# Display graph comparing Gender to group assignment
 def update_value(value):
     return 0 if 'M' in value else 1
 data['M/F'] = data['M/F'].apply(lambda x: update_value(x))

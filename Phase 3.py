@@ -51,3 +51,15 @@ plt.xlabel(None)
 plt.ylabel('Age')
 plt.title('Ages for examing outliers')
 plt.show()
+
+# Display scatterplot examining age vs MMSE
+data.plot.scatter(x = 'Age', y = 'MMSE')
+plt.show()
+
+# Display scatterplot examining age vs MMSE
+data.plot.scatter(x = 'Age', y = 'EDUC')
+plt.show()
+
+# Display scatterplot examining age vs MMSE
+data.plot.scatter(x = 'Age', y = 'ASF')
+plt.show()

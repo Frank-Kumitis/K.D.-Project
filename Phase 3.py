@@ -18,7 +18,11 @@ def update_value(value):
 data['Group'] = data['Group'].apply(lambda x: update_value(x))
 
 # Display graph comparing MMSE to group assignment
-data.plot.line('MMSE', 'Group')
+counts = data['MMSE'].value_counts().sort_index()
+counts.plot.bar('MMSE', 'Group')
+plt.xlabel('MMSE value')
+plt.ylabel('Total amount of Demented patients')
+plt.title('Patient MMSE value compared to Demented status')
 plt.show()
 
 # Display graph comparing gender to group assignment
@@ -29,6 +33,7 @@ grouped_totals = data.groupby('Group')['M/F'].sum()
 grouped_totals.plot.bar('M/F', 'Group')
 plt.xlabel('Male (0) vs. Female (1)')
 plt.ylabel('Total amount of Demented patients')
+plt.title('Demented patients grouped by sex')
 plt.show()
 
 # Display graph comparing age to group assignment
@@ -37,4 +42,12 @@ count_values = filtered_data['Age'].value_counts().sort_index()
 count_values.plot.bar('Age', 'Group')
 plt.xlabel('Age')
 plt.ylabel('Total amount of Demented patients')
+plt.title('Demented patients catagorized by age')
+plt.show()
+
+# Display boxplot examining if there are any outliers based on age
+data['Age'].plot.box()
+plt.xlabel(None)
+plt.ylabel('Age')
+plt.title('Ages for examing outliers')
 plt.show()

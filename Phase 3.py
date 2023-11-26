@@ -6,6 +6,12 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import accuracy_score
 from sklearn.tree import plot_tree
 
+from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import PCA
+from sklearn.cluster import KMeans
+import seaborn as sns
+
+
 # Read csv and set columns
 url = 'https://github.com/mitch172/K.D.-Project/blob/main/oasis_longitudinal_demographics.csv?raw=true'
 data = pd.read_csv(url)
@@ -68,6 +74,9 @@ plt.show()
 data.plot.scatter(x = 'Age', y = 'ASF')
 plt.show()
 
+# Preserving data for future use
+data2 = data
+
 # Make decision tree for finding Demented status
 data = data.drop(['Visit'], axis=1)
 data = data.drop(['MR Delay'], axis=1)
@@ -82,4 +91,68 @@ accuracy = accuracy_score(y_test, y_pred)
 print(f"Accuracy: {accuracy}")
 plt.figure(figsize=(30, 10))
 plot_tree(clf, filled=True, feature_names=X.columns, class_names=y.unique().astype(str))
+plt.show()
+
+#Correlation
+correlation_matrix = data.corr()
+plt.matshow(correlation_matrix)
+correlation_matrix.convert_dtypes(str)
+plt.xticks(range(data.select_dtypes(['number']).shape[1]), data.select_dtypes(['number']).columns)
+plt.yticks(range(data.select_dtypes(['number']).shape[1]), data.select_dtypes(['number']).columns)
+plt.colorbar()
+plt.show()
+
+# Principal Component Analysis
+
+# Refreshing dropped columns
+data = data2
+
+
+features = ['Age', 'EDUC', 'SES', 'MMSE', 'eTIV', 'nWBV', 'M/F', 'CDR']
+data.dropna(inplace=True)
+
+x = data.loc[:,features].values
+y = data.loc[:,['Group']].values
+x = StandardScaler().fit_transform(x)
+
+pca = PCA(n_components=2)
+principal_components = pca.fit_transform(x)
+principal_data = pd.DataFrame(data = principal_components,
+                              columns=['principal component 1', 'principal component 2'])
+
+finished_data = pd.concat([principal_data, data[['Group']]], axis=1)
+
+fig = plt.figure(figsize = (8,8))
+ax = fig.add_subplot(1,1,1)
+ax.set_xlabel('principal component 1')
+ax.set_ylabel('principal component 2')
+ax.set_title('2 component PCA')
+
+targets = [0,1]
+colors = ['g', 'r']
+for target, color in zip(targets,colors):
+    indicesToKeep = finished_data['Group'] == target
+    ax.scatter(finished_data.loc[indicesToKeep, 'principal component 1']
+               , finished_data.loc[indicesToKeep, 'principal component 2']
+               , c = color
+               , s = 50)
+ax.legend(targets)
+ax.grid()
+plt.show()
+
+
+#Clustering
+
+km_data = finished_data.dropna()
+
+kmeans = KMeans(n_clusters=3, n_init='auto', random_state=50)
+pd.set_option('mode.chained_assignment', None)
+kmeans.fit(km_data)
+km_data['Clusters']= kmeans.labels_
+
+sns.scatterplot(x='principal component 1',
+                y='principal component 2',
+                hue='Clusters', data=km_data)
+
+plt.title('K-Means on Principal Components')
 plt.show()
